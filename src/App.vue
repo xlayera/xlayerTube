@@ -1,19 +1,18 @@
 <script setup>
-
+import Home from './components/Home.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/img/test-logo2.png" width="125" height="125" />
+    <img alt="xlayerTube logo" class="logo" src="./assets/logo-tube.png" width="225" height="225" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <!--  <div class="wrapper">
+      <Home></Home>
+    </div> -->
   </header>
 
-  <main>
-   
-  </main>
+  <Home />
+ 
 </template>
 
 <style>
