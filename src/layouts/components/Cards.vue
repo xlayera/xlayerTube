@@ -31,7 +31,13 @@ console.log(getMinutes(16000));
 
         </div>
         <div class="content">
-            <img class="iFrame-img" :src="getImgUrl(miniaturaId)" alt="alt" />
+            <div v-if="miniaturaId">
+                <img class="iFrame-img" :src="getImgUrl(miniaturaId)" alt="alt" />
+            </div>
+            <div v-else>
+                <VueYtframe class="iFrame-modal" :video-id="videoId"
+                    :player-vars="{ autoplay: 0, listType: 'user_uploads' }" />
+            </div>
             <h3 class="time"> Duration: {{ time ? getMinutes(time) : "No time provided" }}</h3>
 
         </div>

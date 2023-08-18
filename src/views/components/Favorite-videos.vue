@@ -62,18 +62,20 @@ function getDeafultContent() {
 
 //all my saved videos in DB
 const myVideos = ref(null);
-fetch('http://3.210.117.144:2000/v1/all-video')
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log("myVideos data", data.data);
-            myVideos.value = data.data
-        } else {
-            console.log("error", data.msg);
-        }
+function myAllVideos() {
+    fetch('http://3.210.117.144:2000/v1/all-video')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("myVideos data", data.data);
+                myVideos.value = data.data
+            } else {
+                console.log("error", data.msg);
+            }
 
-    });
-
+        });
+}
+myAllVideos()
 </script>
 
 <template scoped>

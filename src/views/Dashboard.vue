@@ -79,22 +79,20 @@ function search(message) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    videosFromSearch.value = data.data.items
-                    deafultContent = data.data.items
+                    console.log("dataaaaaaaa", data.data.items[0]);
+                    videosFromSearch.value = data.data.items[0]
+                    deafultContent = data.data.items[0]
 
-                    deafultContent.forEach(element => {
-                        fetch('http://3.210.117.144:2000/v1/info-byId-api', request("POST", { idVideo: element.id.videoId }))
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // console.log("data2", data.idVideo, "== ", data.time);
-                                    element.id.time = data.time
-                                } else {
-                                    console.log("error", data.msg);
-                                }
+                    fetch('http://3.210.117.144:2000/v1/info-byId-api', request("POST", { idVideo: deafultContent.id.videoId }))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                deafultContent.id.time = data.time
+                            } else {
+                                console.log("error", data.msg);
+                            }
 
-                            });
-                    });
+                        });
                     videosFromSearch.value = deafultContent
                     console.log("content", deafultContent);
                 } else {
@@ -109,18 +107,19 @@ function search(message) {
 
 function addVideo(data) {
 
-    console.log("addVideo", data[0]);
     let dataToRequest = {
-        "idVideo": data[0].id,
-        "title": data[0].snippet.title,
-        "timeDuration": data[0].time,
-        "description": data[0].snippet.description
+        "idVideo": data.length > 0 ? data[0].id : data.id.videoId,
+        "title": data.length > 0 ? data[0].snippet.title : data.snippet.title,
+        "timeDuration": data.length > 0 ? data[0].time : data.id.time,
+        "description": data.length > 0 ? data[0].snippet.description : data.snippet.description
     }
+
     fetch('http://3.210.117.144:2000/v1/add-video', request("POST", dataToRequest))
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 console.log("add video", data);
+                myAllVideos()
                 open = false
             } else {
                 console.log("error", data.msg);
@@ -129,6 +128,21 @@ function addVideo(data) {
         });
 }
 
+//all my saved videos in DB
+const myVideos = ref(null);
+function myAllVideos() {
+    fetch('http://3.210.117.144:2000/v1/all-video')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("myVideos data", data.data);
+                myVideos.value = data.data
+            } else {
+                console.log("error", data.msg);
+            }
+
+        });
+}
 </script>
 
 <template>
@@ -159,8 +173,7 @@ function addVideo(data) {
             <Teleport to="body">
                 <transition name="modal">
                     <div v-if="open" class="modal-mask">
-                        <div class="modal-container2"
-                            @click="showModal = true, videoId = video.id.videoId, title = video.snippet.title, description = video.snippet.description">
+                        <div class="modal-container2">
                             <div class="modal-header">
                                 <h1>{{ title }}</h1>
                             </div>
@@ -168,7 +181,7 @@ function addVideo(data) {
 
                             <div class="modal-body" v-if="isUrl">
                                 <cards id="show-card" v-bind:title=v.snippet.title v-bind:videoId=v.id
-                                    v-bind:description=v.snippet.description v-bind:miniaturaId=v.id v-bind:time=v.time
+                                    v-bind:description=v.snippet.description v-bind:time=v.time
                                     v-for="v in videosFromSearch">
                                 </cards>
 
@@ -177,13 +190,14 @@ function addVideo(data) {
                             </div>
 
                             <div class="modal-body" v-else>
-                                <cards id="show-card" v-bind:title=v.snippet.title v-bind:videoId=v.id.videoId
-                                    v-bind:description=v.snippet.description v-bind:miniaturaId=v.id.videoId
-                                    v-bind:time=v.id.time v-for="v in videosFromSearch">
+                                <cards id="show-card" v-bind:title=videosFromSearch.snippet.title
+                                    v-bind:videoId=videosFromSearch.id.videoId
+                                    v-bind:description=videosFromSearch.snippet.description
+                                    v-bind:time=videosFromSearch.id.time>
                                 </cards>
 
                                 <button class="btn-close" @click="open = false">Close</button>
-                                <button class='btn' @click="open = false, addVideo(deafultContent)">Add</button>
+                                <button class='btn' v-on:click="open = false, addVideo(deafultContent)">Add</button>
                             </div>
 
 
@@ -273,7 +287,6 @@ function addVideo(data) {
 }
 
 .modal-container2 {
-    cursor: pointer;
     overflow: hidden;
     margin: auto;
     padding: 20px 30px;

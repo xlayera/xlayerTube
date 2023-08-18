@@ -1,4 +1,5 @@
 <script setup >
+import { ref } from 'vue'
 
 const props = defineProps({
     show: Boolean,
@@ -27,7 +28,24 @@ function deleteVideo(data) {
         .then(data => {
             if (data.success) {
                 console.log("delete video", data);
+                myAllVideos()
                 open = false
+            } else {
+                console.log("error", data.msg);
+            }
+
+        });
+}
+
+//all my saved videos in DB
+const myVideos = ref(null);
+function myAllVideos() {
+    fetch('http://3.210.117.144:2000/v1/all-video')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("myVideos data", data.data);
+                myVideos.value = data.data
             } else {
                 console.log("error", data.msg);
             }
@@ -47,7 +65,7 @@ function deleteVideo(data) {
                 <div class="modal-body">
                     <div v-if="videoId">
                         <VueYtframe class="iFrame-modal" :video-id="videoId"
-                            :player-vars="{ autoplay: 0, listType: 'user_uploads' }" />
+                            :player-vars="{ autoplay: 1, listType: 'user_uploads' }" />
                     </div>
 
 
@@ -59,7 +77,7 @@ function deleteVideo(data) {
                     <p v-else>
                         This video doesn't contain description
                     </p>
-                    <button class="btn-close" @click="open = false, deleteVideo(videoId)">Delete</button>
+                    <button class="btn-close" v-on:click="open = false, deleteVideo(videoId)">Delete</button>
                     <button class="btn modal-default-button" @click="$emit('close')">
                         Ok
                     </button>
