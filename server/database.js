@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
-const config = require('./app/config/config.js');
+const URI = "mongodb+srv://xlayer:5OC6xWKcajJ7U26X@cluster0.ycsorpl.mongodb.net/?retryWrites=true&w=majority";
 
-
-const URI = `mongodb://${config.mongoUser}:${config.mongoPassword}@${config.mongoUrl}`;
-mongoose.connect(URI, {
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(result => {
-    console.log('Mongodb conectado');
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
+    console.log('Mongodb connected');
 
 }).catch(error => {
-    console.log('Error al conectar mongodb');
+    console.log('Error to connect mongodb', error);
 })

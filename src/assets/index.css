@@ -133,14 +133,26 @@ p {
   box-shadow: var(--shadow-3);
 }
 
-.btn-hipster {
-  color: var(--white);
-  background: var(--red-5);
+.btn-close {
+  margin-top: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+  color: black;
+  background: #F8FAED;
+  border: transparent;
+  border-radius: var(--border-radius);
+  letter-spacing: var(--letter-spacing);
+  padding: 10px 40px;
+  font-size: 16px;
+  box-shadow: var(--shadow-1);
+  transition: var(--transition);
+  text-transform: capitalize;
+  display: inline-block;
 }
 
-.btn-hipster:hover {
-  color: var(--white);
-  background: var(--red-5);
+.btn-close:hover {
+  background: #f9fceb;
+  box-shadow: var(--shadow-3);
 }
 
 .btn-block {

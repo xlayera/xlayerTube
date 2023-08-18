@@ -7,18 +7,49 @@ const props = defineProps({
     description: String
 })
 
+function request(method, body) {
+    return {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    }
+}
+
+
+function deleteVideo(data) {
+
+    console.log("deleteVideo", data);
+    let dataToRequest = {
+        "idVideo": data,
+    }
+    fetch('http://3.210.117.144:2000/v1/delete-video', request("POST", dataToRequest))
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("delete video", data);
+                open = false
+            } else {
+                console.log("error", data.msg);
+            }
+
+        });
+}
+
 </script>
 
 <template>
-    <transition name="Modal">
+    <transition name="modal">
         <div v-if="show" class="modal-mask">
             <div class="modal-container">
                 <div class="modal-header">
                     <h1>{{ title }}</h1>
                 </div>
                 <div class="modal-body">
-                    <VueYtframe class="iFrame" :video-id="videoId"
-                        :player-vars="{ autoplay: 0, listType: 'user_uploads' }" />
+                    <div v-if="videoId">
+                        <VueYtframe class="iFrame-modal" :video-id="videoId"
+                            :player-vars="{ autoplay: 0, listType: 'user_uploads' }" />
+                    </div>
+
 
                 </div>
                 <div class="modal-footer">
@@ -28,6 +59,7 @@ const props = defineProps({
                     <p v-else>
                         This video doesn't contain description
                     </p>
+                    <button class="btn-close" @click="open = false, deleteVideo(videoId)">Delete</button>
                     <button class="btn modal-default-button" @click="$emit('close')">
                         Ok
                     </button>
@@ -41,16 +73,19 @@ const props = defineProps({
 <style>
 @media (min-width: 1024px) {
 
-    .iFrame {
+    .iFrame-modal {
         width: 65vw;
-        height: 405px
+        height: 55vh
     }
 
-
+    .modal-container {
+        width: 70vw;
+        height: 80vh;
+    }
 }
 
 @media (max-width: 1024px) {
-    .iFrame {
+    .iFrame-modal {
         width: 100%;
         height: 405px
     }
@@ -73,7 +108,7 @@ const props = defineProps({
 }
 
 .modal-container {
-    width: 70vw;
+    overflow-y: auto;
     margin: auto;
     padding: 20px 30px;
     background-color: #fff;

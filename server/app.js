@@ -6,7 +6,7 @@ const {
 const config = require('./app/config/config.js');
 const app = express();
 
-//require("./database");
+require("./database");
 app.set("PORT", config.port);
 
 app.use((req, res, next) => {
@@ -34,5 +34,5 @@ app.use("/v1", allRoutes);
 
 app.listen(app.get("PORT"), function (err) {
     if (err) console.log("Error in server setup")
-    console.log("Server listening on Port", app.get("PORT"));
+    console.log("Server listening on port", app.get("PORT"));
 })

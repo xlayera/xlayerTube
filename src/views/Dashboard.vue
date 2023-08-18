@@ -1,5 +1,134 @@
 <script setup>
-import FavoriteVideos from './components/Favorite-videos.vue';
+import Favoritevideos from './components/Favorite-videos.vue';
+import cards from '../layouts/components/Cards.vue';
+import modal from '../layouts/components/Modal.vue';
+import { ref } from 'vue'
+
+const open = ref(false)
+const message = ref('')
+var isUrl = ref(false)
+
+function getImgUrl(id) {
+    return "https://img.youtube.com/vi/" + id + "/0.jpg"
+}
+
+function getMinutes(milisegundos) {
+    const minutos = parseInt(milisegundos / 1000 / 60);
+    milisegundos -= minutos * 60 * 1000;
+    const segundos = milisegundos / 1000;
+    return `${minutos}:${segundos}`;
+};
+
+function clearDataSearch(data) {
+    if (data.includes("https://youtu.be/")) {
+        isUrl = true
+        return data.split("https://youtu.be/")[1]
+    } else if (data.includes("https://www.youtube.com/watch?")) {
+        let splitPart = data.split("https://www.youtube.com/watch?v=")[1]
+        isUrl = true
+        return splitPart.split("&")[0]
+    } else {
+        isUrl = false
+        return data
+    }
+}
+
+function request(method, body) {
+    return {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    }
+}
+
+const videosFromSearch = ref(null);
+var deafultContent = ref(null)
+function search(message) {
+    let dataSearch = clearDataSearch(message)
+    if (isUrl) {
+        fetch('http://3.210.117.144:2000/v1/byId-api', request("POST", { idVideo: dataSearch }))
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    videosFromSearch.value = data.data.items
+                    deafultContent = data.data.items
+
+                    deafultContent
+                    if (deafultContent[0].id) {
+                        fetch('http://3.210.117.144:2000/v1/info-byId-api', request("POST", { idVideo: deafultContent[0].id }))
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log("data2", data.idVideo, "== ", data.time);
+                                    deafultContent[0].time = data.time
+                                } else {
+                                    console.log("error", data.msg);
+                                }
+
+                            });
+                    }
+                    videosFromSearch.value = deafultContent
+                    console.log("content", deafultContent);
+                } else {
+                    console.log("error", data.msg);
+                }
+
+            });
+    } else {
+        fetch('http://3.210.117.144:2000/v1/search-api', request("POST", { searchQuery: dataSearch }))
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    videosFromSearch.value = data.data.items
+                    deafultContent = data.data.items
+
+                    deafultContent.forEach(element => {
+                        fetch('http://3.210.117.144:2000/v1/info-byId-api', request("POST", { idVideo: element.id.videoId }))
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // console.log("data2", data.idVideo, "== ", data.time);
+                                    element.id.time = data.time
+                                } else {
+                                    console.log("error", data.msg);
+                                }
+
+                            });
+                    });
+                    videosFromSearch.value = deafultContent
+                    console.log("content", deafultContent);
+                } else {
+                    console.log("error", data.msg);
+                }
+
+            });
+    }
+
+}
+
+
+function addVideo(data) {
+
+    console.log("addVideo", data[0]);
+    let dataToRequest = {
+        "idVideo": data[0].id,
+        "title": data[0].snippet.title,
+        "timeDuration": data[0].time,
+        "description": data[0].snippet.description
+    }
+    fetch('http://3.210.117.144:2000/v1/add-video', request("POST", dataToRequest))
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log("add video", data);
+                open = false
+            } else {
+                console.log("error", data.msg);
+            }
+
+        });
+}
+
 </script>
 
 <template>
@@ -10,31 +139,172 @@ import FavoriteVideos from './components/Favorite-videos.vue';
             </h1>
 
             <h3>
-                now you can search for your favorite pet videos from youtube and bring them directly to your page
+                now you can search for your favorite pet videos from youtube and bring them directly to your page! ;)
             </h3>
-            <button class='btn' id="show-modal">Search Now!</button>
 
-            <div class="card" style="background-color: red;">
-                <!-- <button class='btn' id="show-modal" @click="showModal = true"></button> -->
+            <form action class="form" @submit.prevent="contact">
+                <div class="modal-body">
+                    <input v-model="message" class="form-input" type="text" id="message" required placeholder="Search" />
+                    <button class='btn' @click="open = true, message = message, search(message)" :disabled=!message>Search
+                        Now!</button>
 
-                <Teleport to="body">
-                    <!-- use the modal component, pass in the prop -->
-                    <modal :show="showModal" v-bind:title=videoTitle v-bind:url="urlYoutuve"
-                        v-bind:description="description" @close="showModal = false">
-                        <template #header>
-                            <h3>custom header</h3>
-                        </template>
-                    </modal>
-                </Teleport>
-            </div>
+                    <p class="error" v-if="!message && !open">
+                        This field is required
+                    </p>
+                </div>
+
+            </form>
+
+            <!-- use the modal component, pass in the prop -->
+            <Teleport to="body">
+                <transition name="modal">
+                    <div v-if="open" class="modal-mask">
+                        <div class="modal-container2"
+                            @click="showModal = true, videoId = video.id.videoId, title = video.snippet.title, description = video.snippet.description">
+                            <div class="modal-header">
+                                <h1>{{ title }}</h1>
+                            </div>
+
+
+                            <div class="modal-body" v-if="isUrl">
+                                <cards id="show-card" v-bind:title=v.snippet.title v-bind:videoId=v.id
+                                    v-bind:description=v.snippet.description v-bind:miniaturaId=v.id v-bind:time=v.time
+                                    v-for="v in videosFromSearch">
+                                </cards>
+
+                                <button class="btn-close" @click="open = false">Close</button>
+                                <button class='btn' @click="addVideo(deafultContent)">Add</button>
+                            </div>
+
+                            <div class="modal-body" v-else>
+                                <cards id="show-card" v-bind:title=v.snippet.title v-bind:videoId=v.id.videoId
+                                    v-bind:description=v.snippet.description v-bind:miniaturaId=v.id.videoId
+                                    v-bind:time=v.id.time v-for="v in videosFromSearch">
+                                </cards>
+
+                                <button class="btn-close" @click="open = false">Close</button>
+                                <button class='btn' @click="open = false, addVideo(deafultContent)">Add</button>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </transition>
+            </Teleport>
         </div>
 
         <br>
-        <FavoriteVideos />
+        <Favoritevideos />
     </div>
 </template>
 
 <style>
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    justify-content: center;
+    /* align-items: center; */
+    align-items: stretch;
+}
+
+.card2:hover {
+    transition: 0.2s;
+    box-shadow: 0px 1px 9px darkgrey;
+}
+
+@media (min-width: 1024px) {
+
+    .iFrame-img {
+        width: 700px;
+        height: 405px
+    }
+
+    .card2 {
+        margin-bottom: 50px;
+        background-color: #f1f5f9;
+        border: 1pxs solid silver;
+        border-radius: 8px;
+        box-shadow: 0px 1px 3px darkgrey;
+        transition: 0.2s;
+        width: 700px;
+        height: auto;
+
+    }
+
+
+
+}
+
+@media (max-width: 1024px) {
+    .iFrame-img {
+        width: 100%;
+        height: 405px
+    }
+
+    .card2 {
+        margin-bottom: 50px;
+        background-color: #f1f5f9;
+        border: 1pxs solid silver;
+        border-radius: 8px;
+        box-shadow: 0px 1px 3px darkgrey;
+        transition: 0.2s;
+        width: 60vw;
+        height: auto;
+    }
+}
+
+.error {
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+.form-input {
+    margin: 10px;
+    /* border: transparent; */
+    border-radius: var(--border-radius);
+    padding: 10px;
+    font-size: 16px;
+    box-shadow: var(--shadow-1);
+    transition: var(--transition);
+    display: inline-block;
+    width: 40vw;
+}
+
+.modal-container2 {
+    cursor: pointer;
+    overflow: hidden;
+    margin: auto;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    transition: all 0.3s ease;
+}
+
+
+@media (min-width: 1024px) {
+
+    .modal-container2 {
+        width: 68w;
+        height: 70vh;
+        overflow-y: auto;
+    }
+
+
+}
+
+@media (max-width: 1024px) {
+
+    .modal-container2 {
+        width: 70vw;
+        overflow-y: auto;
+    }
+
+
+}
+
 .img {
     width: 100%;
     display: left;

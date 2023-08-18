@@ -26,13 +26,14 @@ console.log(getMinutes(16000));
 <template>
     <div class="card">
         <div class="title">
-            <h1>{{ title }}</h1>
+            <h1>{{ title ? title : "no title provided" }}</h1>
 
-           
+
         </div>
         <div class="content">
+            <img class="iFrame-img" :src="getImgUrl(miniaturaId)" alt="alt" />
             <h3 class="time"> Duration: {{ time ? getMinutes(time) : "No time provided" }}</h3>
-            <img class="iFrame" :src="getImgUrl(miniaturaId)" alt="alt" />
+
         </div>
         <div class="description">
             <p v-if="description">
@@ -46,10 +47,6 @@ console.log(getMinutes(16000));
 </template>
 
 <style>
-
-.time{
-
-}
 .title,
 .description {
     text-align: center;
@@ -72,7 +69,7 @@ console.log(getMinutes(16000));
 
 @media (min-width: 1024px) {
 
-    .iFrame {
+    .iFrame-img {
         width: 700px;
         height: 405px
     }
@@ -91,7 +88,7 @@ console.log(getMinutes(16000));
 }
 
 @media (max-width: 1024px) {
-    .iFrame {
+    .iFrame-img {
         width: 100%;
         height: 405px
     }
@@ -103,7 +100,7 @@ console.log(getMinutes(16000));
         border-radius: 8px;
         box-shadow: 0px 1px 3px darkgrey;
         transition: 0.2s;
-        width: 90vw;
+        width: 60vw;
         height: auto;
     }
 }

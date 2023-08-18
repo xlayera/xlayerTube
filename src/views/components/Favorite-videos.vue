@@ -4,62 +4,76 @@ import cards from '../../layouts/components/Cards.vue';
 import dialog from '../../layouts/components/Dialog.vue';
 import { ref } from 'vue'
 
+const message = ref(null)
+
 const showModal = ref(false)
-const videos = ref(null);
 
 /* dialog content */
 var showDialog = ref(false)
 var titleDialog = ref(null)
 var contentDialog = ref(null)
 
-
-/* const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ searchQuery: "puppy" })
-}; */
-
-function request(body) {
+function request(method, body) {
     return {
-        method: 'POST',
+        method: method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
     }
 }
 
-var deafultContent = ref([])
+if (message) {
+    console.log("message", message);
+}
 
-fetch('http://localhost:2000/v1/search-api', request({ searchQuery: "cutes swiss shepherd" })) //deafult content
+//deafult content directly from api
+const videos = ref(null);
+var deafultContent = ref(null)
+function getDeafultContent() {
+    fetch('http://3.210.117.144:2000/v1/search-api', request("POST", { searchQuery: "cutes swiss shepherd" }))
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                videos.value = data.data.items
+                deafultContent = data.data.items
+
+                deafultContent.forEach(element => {
+                    fetch('http://3.210.117.144:2000/v1/info-byId-api', request("POST", { idVideo: element.id.videoId }))
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // console.log("data2", data.idVideo, "== ", data.time);
+                                element.id.time = data.time
+                            } else {
+                                console.log("error", data.msg);
+                            }
+
+                        });
+                });
+                videos.value = deafultContent
+                console.log("content", deafultContent);
+            } else {
+                console.log("error", data.msg);
+            }
+
+        });
+
+}
+//getDeafultContent() 
+
+//all my saved videos in DB
+const myVideos = ref(null);
+fetch('http://3.210.117.144:2000/v1/all-video')
     .then(response => response.json())
     .then(data => {
-        console.log("data", data.data.items);
         if (data.success) {
-            videos.value = data.data.items
-            deafultContent = data.data.items
-
-            deafultContent.forEach(element => {
-                fetch('http://localhost:2000/v1/info-byId-api', request({ idVideo: element.id.videoId }))
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // console.log("data2", data.idVideo, "== ", data.time);
-                            element.id.time = data.time
-                        } else {
-                            console.log("error");
-                        }
-
-                    });
-            });
-            videos.value = deafultContent
-            console.log("content", deafultContent);
+            console.log("myVideos data", data.data);
+            myVideos.value = data.data
         } else {
-            console.log("error");
-            showDialog = true;
-            titleDialog.value = 'Warning'
-            contentDialog.value = data.msg
+            console.log("error", data.msg);
         }
 
     });
+
 </script>
 
 <template scoped>
@@ -67,20 +81,27 @@ fetch('http://localhost:2000/v1/search-api', request({ searchQuery: "cutes swiss
         Your videos
     </h1>
 
+    <cards v-for="myVideo in myVideos" id="show-card"
+        @click="showModal = true, videoId = myVideo.idVideo, title = myVideo.title, description = myVideo.description"
+        v-bind:title=myVideo.title v-bind:videoId=myVideo.idVideo v-bind:description="myVideo.description"
+        v-bind:miniaturaId=myVideo.idVideo v-bind:time=myVideo.timeDuration>
+    </cards>
 
-    <cards id="show-card"
+    <cards v-for="video in videos" id="show-card"
         @click="showModal = true, videoId = video.id.videoId, title = video.snippet.title, description = video.snippet.description"
         v-bind:title=video.snippet.title v-bind:videoId=video.id.videoId v-bind:description="video.snippet.description"
-        v-bind:miniaturaId=video.id.videoId :time=video.id.time v-for="video in videos"></cards>
+        v-bind:miniaturaId=video.id.videoId v-bind:time=video.id.time>
+    </cards>
 
-    <!-- <button class='btn' id="show-modal" @click="showModal = true"></button> -->
 
     <!-- use the modal component, pass in the prop -->
-    <modal :show="showModal" :videoId="videoId" :title="title" :description="description" @close="showModal = false">
-        <template #header>
-            <h3>custom header</h3>
-        </template>
-    </modal>
+    <Teleport to="body">
+        <modal :show="showModal" :videoId="videoId" :title="title" :description="description" @close="showModal = false">
+            <template #header>
+                <h3>custom header</h3>
+            </template>
+        </modal>
+    </Teleport>
 
     <!-- <dialog :show="showDialog = true" :titleDialog="titleDialog" :contentDialog="contentDialog" @close="showDialog = false">
     </dialog> -->
