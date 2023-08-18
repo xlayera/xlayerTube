@@ -1,11 +1,11 @@
 <script setup>
 import Favoritevideos from './components/Favorite-videos.vue';
 import cards from '../layouts/components/Cards.vue';
-import modal from '../layouts/components/Modal.vue';
+import { notify } from "@kyvg/vue3-notification";
 import { ref } from 'vue'
 
-const open = ref(false)
 const message = ref('')
+var open = ref(false)
 var isUrl = ref(false)
 
 function getImgUrl(id) {
@@ -41,6 +41,7 @@ function request(method, body) {
     }
 }
 
+
 const videosFromSearch = ref(null);
 var deafultContent = ref(null)
 function search(message) {
@@ -63,6 +64,10 @@ function search(message) {
                                     deafultContent[0].time = data.time
                                 } else {
                                     console.log("error", data.msg);
+                                    notify({
+                                        title: "Warning",
+                                        text: data.msg,
+                                    });
                                 }
 
                             });
@@ -71,6 +76,10 @@ function search(message) {
                     console.log("content", deafultContent);
                 } else {
                     console.log("error", data.msg);
+                    notify({
+                        title: "Warning",
+                        text: data.msg,
+                    });
                 }
 
             });
@@ -90,6 +99,10 @@ function search(message) {
                                 deafultContent.id.time = data.time
                             } else {
                                 console.log("error", data.msg);
+                                notify({
+                                    title: "Warning",
+                                    text: data.msg,
+                                });
                             }
 
                         });
@@ -97,6 +110,10 @@ function search(message) {
                     console.log("content", deafultContent);
                 } else {
                     console.log("error", data.msg);
+                    notify({
+                        title: "Warning",
+                        text: data.msg,
+                    });
                 }
 
             });
@@ -120,10 +137,16 @@ function addVideo(data) {
             if (data.success) {
                 console.log("add video", data);
                 myAllVideos()
-                open = false
+                notify({
+                    title: "Successful",
+                    text: "Video saved successfully",
+                });
             } else {
                 console.log("error", data.msg);
-                open = false
+                notify({
+                    title: "Warning",
+                    text: data.msg,
+                });
             }
 
         });
@@ -140,6 +163,10 @@ function myAllVideos() {
                 myVideos.value = data.data
             } else {
                 console.log("error", data.msg);
+                notify({
+                    title: "Warning",
+                    text: data.msg,
+                });
             }
 
         });
@@ -198,7 +225,7 @@ function myAllVideos() {
                                 </cards>
 
                                 <button class="btn-close" @click="open = false">Close</button>
-                                <button class='btn' v-on:click="open = false, addVideo(deafultContent)">Add</button>
+                                <button class='btn' @click="open = false, addVideo(deafultContent)">Add</button>
                             </div>
 
 

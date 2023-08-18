@@ -5,9 +5,10 @@
 <template>
   <header>
     <div class="container">
-      <img alt="xlayerTube logo" class="logo" src="./assets/logo-tube.png" width="225" height="225" />
-     
+      <img alt="xlayerTube logo" class="logo" src="./assets/logo-tube.png" width="225" height="215" />
+
       <RouterView></RouterView>
+      <notifications />
     </div>
   </header>
 </template>

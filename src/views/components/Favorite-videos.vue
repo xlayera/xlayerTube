@@ -1,17 +1,16 @@
 <script setup>
 import modal from '../../layouts/components/Modal.vue';
 import cards from '../../layouts/components/Cards.vue';
-import dialog from '../../layouts/components/Dialog.vue';
+import { notify } from "@kyvg/vue3-notification";
 import { ref } from 'vue'
 
 const message = ref(null)
-
 const showModal = ref(false)
 
-/* dialog content */
-var showDialog = ref(false)
-var titleDialog = ref(null)
-var contentDialog = ref(null)
+
+if (message) {
+    console.log("message", message);
+}
 
 function request(method, body) {
     return {
@@ -19,10 +18,6 @@ function request(method, body) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
     }
-}
-
-if (message) {
-    console.log("message", message);
 }
 
 //deafult content directly from api
@@ -45,6 +40,10 @@ function getDeafultContent() {
                                 element.id.time = data.time
                             } else {
                                 console.log("error", data.msg);
+                                notify({
+                                    title: "Warning",
+                                    text: data.msg,
+                                });
                             }
 
                         });
@@ -53,6 +52,10 @@ function getDeafultContent() {
                 console.log("content", deafultContent);
             } else {
                 console.log("error", data.msg);
+                notify({
+                    title: "Warning",
+                    text: data.msg,
+                });
             }
 
         });
@@ -71,11 +74,17 @@ function myAllVideos() {
                 myVideos.value = data.data
             } else {
                 console.log("error", data.msg);
+                notify({
+                    title: "Warning",
+                    text: data.msg,
+                });
             }
 
         });
 }
 myAllVideos()
+
+
 </script>
 
 <template scoped>
@@ -107,9 +116,6 @@ myAllVideos()
             </template>
         </modal>
     </Teleport>
-
-    <!-- <dialog :show="showDialog = true" :titleDialog="titleDialog" :contentDialog="contentDialog" @close="showDialog = false">
-    </dialog> -->
 </template>
 
 <style>

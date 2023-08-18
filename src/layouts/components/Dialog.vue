@@ -1,63 +1,41 @@
 <script setup>
-const props = defineProps({
-    show: Boolean,
-    title: String,
-    content: String,
-})
+import { ref } from 'vue'
 
-</script> 
+const dialog = ref(false)
+
+</script>
 
 <template>
-    <transition name="Dialog">
-        <div v-if="show" >
-            <div class="dialog-container">
-                <div class="dialog-header">
-                    <h1>{{ title }}</h1>
-                </div>
-                <div class="dialog-body">
-                    <p>
-                        {{ content }}
-                    </p>
-                </div>
-                <div class="dialog-footer">
-                    <button class="btn modal-default-button" @click="$emit('close')">
-                        Ok
-                    </button>
-                </div>
-            </div>
-        </div>
-    </transition>
+    <div class="text-xs-center">
+        <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on }">
+                <v-btn color="red lighten-2" dark v-on="on">
+                    Click Me
+                </v-btn>
+            </template>
+
+            <v-card>
+                <v-card-title class="headline grey lighten-2" primary-title>
+                    Privacy Policy
+                </v-card-title>
+
+                <v-card-text>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click="dialog = false">
+                        I accept
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+    </div>
 </template>
-
-<style>
-@media (max-width: 1024px) {
-
-    .dialog-container {
-        width: 80vw;
-    }
-}
-
-
-.dialog-container {
-    margin: auto;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-    transition: all 0.3s ease;
-}
-
-
-.dialog-header h3 {
-    margin-top: 0;
-    color: #42b983;
-}
-
-.dialog-body {
-    margin: 20px 0;
-}
-
-.dialog-default-button {
-    float: right;
-}
-</style>

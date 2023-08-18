@@ -1,4 +1,5 @@
 <script setup >
+import { notify } from "@kyvg/vue3-notification";
 import { ref } from 'vue'
 
 const props = defineProps({
@@ -19,7 +20,6 @@ function request(method, body) {
 
 function deleteVideo(data) {
 
-    console.log("deleteVideo", data);
     let dataToRequest = {
         "idVideo": data,
     }
@@ -30,8 +30,16 @@ function deleteVideo(data) {
                 console.log("delete video", data);
                 myAllVideos()
                 open = false
+                notify({
+                    title: "Successful",
+                    text: "Video deleted successfully",
+                });
             } else {
                 console.log("error", data.msg);
+                notify({
+                    title: "Warning",
+                    text: data.msg,
+                });
             }
 
         });
@@ -48,6 +56,10 @@ function myAllVideos() {
                 myVideos.value = data.data
             } else {
                 console.log("error", data.msg);
+                notify({
+                    title: "Warning",
+                    text: data.msg,
+                });
             }
 
         });
@@ -119,7 +131,7 @@ function myAllVideos() {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    /* background-color: rgba(0, 0, 0, 0.5); */
     display: flex;
     transition: opacity 0.3s ease;
 }

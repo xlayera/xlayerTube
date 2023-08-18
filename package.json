@@ -7,6 +7,8 @@
     "preview": "vite preview --port 5050"
   },
   "dependencies": {
+    "@kyvg/vue3-notification": "^3.0.1",
+    "primevue": "^3.32.0",
     "vue": "^3.2.26",
     "vue-router": "^4.2.4",
     "vue3-ytframe": "^0.3.3"
