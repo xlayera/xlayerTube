@@ -28,7 +28,7 @@ screnshots
 
 ![image](https://github.com/xlayera/xlayerTube/assets/13389525/18ab736c-03c4-4548-a091-7adfffde6159)
 
-![image](https://github.com/xlayera/xlayerTube/assets/13389525/2bba5173-67ac-4d28-a9a9-88902f3643e8)
+![image](https://github.com/xlayera/xlayerTube/assets/13389525/c4aaa572-8fcd-42ff-adab-b01593d31ce6)
 
-![image](https://github.com/xlayera/xlayerTube/assets/13389525/0fdff4dc-6837-468f-bc26-8b57116be1ac)
+![image](https://github.com/xlayera/xlayerTube/assets/13389525/1c21abfc-ca57-4163-995f-cdd5047b0d2d)
 
