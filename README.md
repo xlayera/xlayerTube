@@ -30,6 +30,5 @@ screnshots
 
 ![image](https://github.com/xlayera/xlayerTube/assets/13389525/c4aaa572-8fcd-42ff-adab-b01593d31ce6)
 
-![image](https://github.com/xlayera/xlayerTube/assets/13389525/0044714a-65a6-4ea5-be21-ff3cfb480257)
-
+![image](https://github.com/xlayera/xlayerTube/assets/13389525/9b18a3a5-9da5-40e4-911a-ca3a86f04817)
 
