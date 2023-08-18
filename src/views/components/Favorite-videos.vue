@@ -83,17 +83,20 @@ myAllVideos()
         Your videos
     </h1>
 
-    <cards v-for="myVideo in myVideos" id="show-card"
-        @click="showModal = true, videoId = myVideo.idVideo, title = myVideo.title, description = myVideo.description"
-        v-bind:title=myVideo.title v-bind:videoId=myVideo.idVideo v-bind:description="myVideo.description"
-        v-bind:miniaturaId=myVideo.idVideo v-bind:time=myVideo.timeDuration>
-    </cards>
+    <div class="container-grid">
+        <cards v-for="myVideo in myVideos" id="show-card"
+            @click="showModal = true, videoId = myVideo.idVideo, title = myVideo.title, description = myVideo.description"
+            v-bind:title=myVideo.title v-bind:videoId=myVideo.idVideo v-bind:description="myVideo.description"
+            v-bind:miniaturaId=myVideo.idVideo v-bind:time=myVideo.timeDuration>
+        </cards>
 
-    <cards v-for="video in videos" id="show-card"
-        @click="showModal = true, videoId = video.id.videoId, title = video.snippet.title, description = video.snippet.description"
-        v-bind:title=video.snippet.title v-bind:videoId=video.id.videoId v-bind:description="video.snippet.description"
-        v-bind:miniaturaId=video.id.videoId v-bind:time=video.id.time>
-    </cards>
+        <cards v-for="video in videos" id="show-card"
+            @click="showModal = true, videoId = video.id.videoId, title = video.snippet.title, description = video.snippet.description"
+            v-bind:title=video.snippet.title v-bind:videoId=video.id.videoId v-bind:description="video.snippet.description"
+            v-bind:miniaturaId=video.id.videoId v-bind:time=video.id.time>
+        </cards>
+
+    </div>
 
 
     <!-- use the modal component, pass in the prop -->
@@ -109,4 +112,24 @@ myAllVideos()
     </dialog> -->
 </template>
 
-<style></style>
+<style>
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+
+@media (min-width: 1024px) {
+
+    .container-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            ". ."
+            ". ."
+            ". .";
+        width: 50%;
+    }
+}
+</style>

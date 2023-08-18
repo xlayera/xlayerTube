@@ -41,8 +41,8 @@ console.log(getMinutes(16000));
             <h3 class="time"> Duration: {{ time ? getMinutes(time) : "No time provided" }}</h3>
 
         </div>
-        <div class="description">
-            <p v-if="description">
+        <div class="content-footer">
+            <p v-if="description" class="description">
                 {{ description }}
             </p>
             <p v-else>
@@ -53,12 +53,16 @@ console.log(getMinutes(16000));
 </template>
 
 <style>
-.title,
 .description {
+    max-height: 60px;
+    overflow-y: auto;
+}
+.content-footer{
     text-align: center;
 }
 
 .title {
+    text-align: center;
     padding: 16px;
     border-bottom: 1px solid silver;
 }
@@ -88,8 +92,10 @@ console.log(getMinutes(16000));
         box-shadow: 0px 1px 3px darkgrey;
         transition: 0.2s;
         max-width: 700px;
-        width: auto;
+        width: 40vw;
         height: auto;
+        max-height: 81vh;
+        margin-right: 20px;
     }
 }
 
@@ -100,14 +106,14 @@ console.log(getMinutes(16000));
     }
 
     .card {
-        margin-bottom: 50px;
+        margin-bottom: 10px;
         background-color: #f1f5f9;
         border: 1pxs solid silver;
         border-radius: 8px;
         box-shadow: 0px 1px 3px darkgrey;
         transition: 0.2s;
-        width: 60vw;
-        height: auto;
+        width: 95%;
+        height: 80vh;
     }
 }
 </style>

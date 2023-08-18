@@ -11,8 +11,13 @@ const router = createRouter({
             component: Home
         },
         {
+            path: '/:notFound',
+            component: Home
+        },
+        {
             path: '/dashboard',
             component: Dashboard
+            
         },
     
     ]

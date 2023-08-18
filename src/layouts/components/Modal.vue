@@ -92,7 +92,6 @@ function myAllVideos() {
 @media (min-width: 1024px) {
 
     .iFrame-modal {
-        width: 65vw;
         height: 55vh
     }
 

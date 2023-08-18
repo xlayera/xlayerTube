@@ -123,6 +123,7 @@ function addVideo(data) {
                 open = false
             } else {
                 console.log("error", data.msg);
+                open = false
             }
 
         });
@@ -231,7 +232,7 @@ function myAllVideos() {
 @media (min-width: 1024px) {
 
     .iFrame-img {
-        width: 700px;
+        width: 40vw;
         height: 405px
     }
 
@@ -301,7 +302,7 @@ function myAllVideos() {
 
     .modal-container2 {
         width: 68w;
-        height: 70vh;
+        height: 90vh;
         overflow-y: auto;
     }
 
