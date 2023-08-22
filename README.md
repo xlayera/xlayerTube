@@ -3,10 +3,13 @@
 
 This application is to show a gallery of youtube videos (ideally for pets). 
 
-You can add and delete the videos that you like the most, you can also search for both videos with the url www.youtube.com and youtu.be, as well as search by keywords!
+You can add and delete the videos that you like the most, you can also search for both videos with the url youtube.com and youtu.be, as well as search by keywords!
 
 Important!
 This app is only for development purpose
+
+Online demo: <em> http://xlayer.servebeer.com/</em>
+
 
 get started..
 
