@@ -6,7 +6,7 @@
 <template>
     <div class="greetings">
         <h1 class="title">Welcome</h1>
-        <h3>It's a pleasure to show you, the best app to watch your favorites YouTube videos of pets!</h3>
+        <h3>It's my pleasure to show you, the best app to watch your favorites YouTube videos of pets!</h3>
         <h3>Here you can search and add your favorite pet videos from YouTube, to watch them over and over again</h3>
 
 

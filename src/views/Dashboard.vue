@@ -40,7 +40,9 @@ function request(method, body) {
         body: JSON.stringify(body)
     }
 }
-
+function random_item(items) {
+    return items[Math.floor(Math.random() * items.length)];
+}
 
 const videosFromSearch = ref(null);
 var deafultContent = ref(null)
@@ -88,9 +90,11 @@ function search(message) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log("dataaaaaaaa", data.data.items[0]);
-                    videosFromSearch.value = data.data.items[0]
-                    deafultContent = data.data.items[0]
+                    console.log("dataaaaaaaa", data.data.items);
+                    let video = random_item(data.data.items)
+                    console.log("random video from search", video);
+                    videosFromSearch.value = video
+                    deafultContent = video
 
                     fetch('http://3.210.117.144:2000/v1/info-byId-api', request("POST", { idVideo: deafultContent.id.videoId }))
                         .then(response => response.json())
@@ -259,7 +263,7 @@ function myAllVideos() {
 @media (min-width: 1024px) {
 
     .iFrame-img {
-        width: 40vw;
+        width: 100%;
         height: 405px
     }
 

@@ -103,9 +103,31 @@
   }
 }
 
+@media (min-width: 1600px) {
+  #app {
+    max-width: 1484px;
+  }
+
+}
+
+
+@media (min-width: 1024px) and (max-width: 1600px) {
+  #app {
+    /*  max-width: 1284px; */
+    max-width: 80vw;
+  }
+
+}
+
+@media (max-width: 1024px) {
+  #app {
+    max-width: 1024 px;
+  }
+
+}
 
 #app {
-  max-width: 1280px;
+
   margin: 0 auto;
   padding: 2rem;
 

@@ -65,11 +65,10 @@ console.log(getMinutes(16000));
     text-align: center;
     padding: 16px;
     border-bottom: 1px solid silver;
+    font-size: 0.7em;
+    height: 14%;
 }
 
-.title {
-    font-size: 0.7em;
-}
 
 .card:hover {
     cursor: pointer;
@@ -81,7 +80,7 @@ console.log(getMinutes(16000));
 
     .iFrame-img {
         width: 700px;
-        height: 405px
+        height: 340px
     }
 
     .card {
@@ -92,7 +91,7 @@ console.log(getMinutes(16000));
         box-shadow: 0px 1px 3px darkgrey;
         transition: 0.2s;
         max-width: 700px;
-        width: 40vw;
+        width: 24vw;
         height: auto;
         max-height: 81vh;
         margin-right: 20px;

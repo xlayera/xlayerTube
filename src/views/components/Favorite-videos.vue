@@ -124,18 +124,37 @@ myAllVideos()
     grid-template-columns: 1fr 2fr;
 }
 
-@media (min-width: 1024px) {
 
+@media (min-width: 1600px) {
     .container-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
         gap: 0px 0px;
         grid-template-areas:
-            ". ."
-            ". ."
-            ". .";
-        width: 50%;
+            ". . ."
+            ". . ."
+            ". . .";
+        width: 100%;
     }
+
 }
+
+
+@media (min-width: 1024px) and (max-width: 1600px) {
+    .container-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            ". . ."
+            ". . ."
+            ". . .";
+        width: 100%;
+    }
+
+}
+
+
 </style>

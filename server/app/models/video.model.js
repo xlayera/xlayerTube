@@ -6,6 +6,7 @@ const VideoSchema = new Schema({
     idVideo: String,
     timeDuration: Number,
     description: String,
+    date: Date
 });
 
 

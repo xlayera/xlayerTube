@@ -10,7 +10,13 @@ const addVideo = async (req, res) => {
         if (videoFound) return res.status(200).send({ success: false, msg: "This video is already registered" })
 
 
-        const newVideo = new Video({ idVideo: idVideo, title: title, timeDuration: timeDuration, description: description })
+        const newVideo = new Video({
+            idVideo: idVideo,
+            title: title,
+            timeDuration: timeDuration,
+            description: description,
+            date: new Date()
+        })
         const video = await newVideo.save();
         if (!video) return res.status(200).send({ success: false, msg: "Couldn't save video" })
 
