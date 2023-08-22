@@ -1,8 +1,14 @@
-# xlayerTube
+<em> # xlayerTube </em>
 
+
+This application is to show a gallery of youtube videos (ideally for pets). 
+
+You can add and delete the videos that you like the most, you can also search for both videos with the url www.youtube.com and youtu.be, as well as search by keywords!
+
+Important!
 This app is only for development purpose
 
-get started
+get started..
 
 ## Project Setup
 
@@ -22,7 +28,7 @@ npm run dev
 npm run build
 ```
 
-screnshots
+screenshots
 
 ![image](https://github.com/xlayera/xlayerTube/assets/13389525/948f63ee-3ca5-4d58-8ec8-14f14c266a76)
 
